@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "daan-plugins",
+  "description": "Daan's personal Claude Code plugins collection",
+  "owner": {
+    "name": "Daan Ferdinand Usse",
+    "email": "daanferdinandusse@example.com"
+  },
+  "plugins": [
+    {
+      "name": "spec-driven-dev",
+      "description": "Create comprehensive spec documents through deep iterative interviews, then implement them phase-by-phase with verification and decision logging",
+      "version": "1.0.0",
+      "author": {
+        "name": "Daan Ferdinand Usse",
+        "email": "daanferdinandusse@example.com"
+      },
+      "source": "./plugins/spec-driven-dev",
+      "category": "development"
+    }
+  ]
+}

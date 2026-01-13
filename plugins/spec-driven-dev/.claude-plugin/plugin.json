@@ -1,0 +1,11 @@
+{
+  "name": "spec-driven-dev",
+  "description": "Create comprehensive spec documents through deep iterative interviews, then implement them phase-by-phase with verification and decision logging",
+  "version": "1.0.0",
+  "author": {
+    "name": "Daan Ferdinand Usse",
+    "email": "daanferdinandusse@example.com"
+  },
+  "license": "MIT",
+  "keywords": ["specification", "spec", "interview", "implementation", "development"]
+}
