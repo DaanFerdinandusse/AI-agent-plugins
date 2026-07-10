@@ -12,7 +12,7 @@ When given a spec path or name:
 
 1. **Locate the spec**: full path → read directly; name → look in `.claude/specs/` for a matching `.html` (or `.md`) file.
 2. **Read the spec completely.** Note the slices, their verification plans, and the known unknowns.
-3. **Scout only what the slice needs.** Do not run a step-by-step review of the current codebase before implementing — Fable and workflows are good enough to determine the implementation directly. When codebase context is needed, shell out a scanning sweep to gpt-5.5 Codex (see Model Routing) and read its report.
+3. **Scout only what the slice needs.** Do not run a step-by-step review of the current codebase before implementing — Fable and workflows are good enough to determine the implementation directly. When codebase context is needed, shell out a scanning sweep to gpt-5.6-sol Codex (see Model Routing) and read its report.
 4. **Check for existing implementation notes** (`{spec-name}-implementation-notes.md` next to the spec) — if present, this is resumed work: read the notes, run `git diff HEAD`, and pick up at the first incomplete slice.
 5. **Track progress** with the task tools, one task per slice.
 
@@ -30,16 +30,16 @@ Use the **Workflow tool** to run each slice, not a sequential phase-by-phase loo
 
 Typical slice workflow shape:
 
-1. **Scout** (if needed): `gpt5.5:` wrapper agents sweep the codebase/docs for context.
-2. **Implement**: agents build the slice — routed per the rubric below. Parallel gpt-5.5 implementation agents **must use `isolation: 'worktree'`** so Codex and Claude don't collide in the shared checkout.
-3. **Verify**: curl pass (Sonnet), then browser pass (`gpt5.5:` computer use) once end-to-end works.
+1. **Scout** (if needed): `gpt5.6-sol:` wrapper agents sweep the codebase/docs for context.
+2. **Implement**: agents build the slice — routed per the rubric below. Parallel gpt-5.6-sol implementation agents **must use `isolation: 'worktree'`** so Codex and Claude don't collide in the shared checkout.
+3. **Verify**: curl pass (Sonnet), then browser pass (`gpt5.6-sol:` computer use) once end-to-end works.
 4. **Review**: Fable reviews the diff and verification results — never delegated.
 
 Workflow mechanics that matter here:
 
 - Codex runs can exceed the 10-minute Bash timeout. Pass an explicit `timeout`, or run in the background and pull the report files when done.
 - Workflow token budgets only count Claude tokens. Codex work is essentially free and invisible to `budget.spent()` — lean on it hard.
-- Label every Codex-driving agent with a `gpt5.5:` prefix so the user can always see when Codex is doing the work.
+- Label every Codex-driving agent with a `gpt5.6-sol:` prefix so the user can always see when Codex is doing the work.
 
 ## Model Routing
 
@@ -47,7 +47,7 @@ Be smart about which model does which task. The goal is great output, not maximu
 
 **Fable (you, the main loop)** — orchestration, architecture decisions, reviews of plans and implementations (always Fable, no exceptions), frontend/UI implementation of any subtlety, and anything requiring the hardest thinking.
 
-**gpt-5.5 Codex (essentially free — use it as much as possible)** — for any computer use, **shell out** to gpt-5.5 Codex. Also route to Codex:
+**gpt-5.6-sol Codex (essentially free — use it as much as possible)** — for any computer use, **shell out** to gpt-5.6-sol Codex. Also route to Codex:
 - Scanning codebases and researching how existing code works
 - Searching the web
 - Scanning large amounts of PDFs or docs
@@ -64,7 +64,7 @@ Codex is **bad at frontend** — frontend stays with Claude.
 
 Codex is invoked from inside workflows via a lightweight Claude wrapper — sub- and sub-sub-agents driving `codex exec`:
 
-1. Spawn a wrapper agent: model `sonnet`, effort `low`, label prefixed `gpt5.5:`.
+1. Spawn a wrapper agent: model `sonnet`, effort `low`, label prefixed `gpt5.6-sol:`.
 2. Its prompt instructs it to write a **self-contained Codex prompt** (Codex sees none of this conversation), run `codex exec` via Bash, and return the report and changed files.
 3. Put a `schema` on the wrapper so structured output comes back to the orchestrator — no parsing.
 4. Inline the relevant skill into the wrapper's prompt so it knows how to invoke and steer Codex: read `skills/codex-implementation/SKILL.md`, `skills/codex-review/SKILL.md`, or `skills/codex-computer-use/SKILL.md` from this plugin and pass the content along.
@@ -74,7 +74,7 @@ Codex is invoked from inside workflows via a lightweight Claude wrapper — sub-
 
 1. **Curl first.** Spin up the server and send example payloads with curl; check the responses match the spec. This is simpler and more reliable for a model than browser interaction. Run it via a Sonnet agent.
 2. **AI-agent endpoints: LLM-as-judge.** Send the spec's example prompts over curl and judge whether responses show the desired behavior and none of the undesired behavior. This is the robust way to test non-deterministic APIs.
-3. **Browser pass once end-to-end works.** Shell out to gpt-5.5 Codex (`codex-computer-use` skill) to exercise the real UI: what works, what doesn't, what nobody expected. Don't aim for perfect before this pass — its feedback is the input to the next iteration.
+3. **Browser pass once end-to-end works.** Shell out to gpt-5.6-sol Codex (`codex-computer-use` skill) to exercise the real UI: what works, what doesn't, what nobody expected. Don't aim for perfect before this pass — its feedback is the input to the next iteration.
 4. **Fable reviews.** You read the diff and the verification reports yourself before calling a slice done. Codex output is evidence, not authority.
 
 If verification fails, fix and re-verify; escalate to the user only when you cannot resolve it.
@@ -101,7 +101,7 @@ After each slice is implemented and verified, report back:
 {What the slice does end-to-end, what it touches, key decisions}
 
 ### Verification
-{Curl pass results, judge verdicts, browser pass findings — with the gpt5.5 report referenced}
+{Curl pass results, judge verdicts, browser pass findings — with the gpt5.6-sol report referenced}
 
 ### Unknown Unknowns Surfaced
 {Anything the spec didn't foresee: edge cases hit, assumptions that broke, spec sections that need revisiting. "None" is a valid answer, but look hard.}

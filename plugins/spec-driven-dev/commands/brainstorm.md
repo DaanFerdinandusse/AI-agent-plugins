@@ -35,7 +35,7 @@ What problem are we thinking through? Give me the rough shape — the problem, w
 
 Route research by cost — sweeps are cheap-model work:
 
-- **Codebase scanning, web searching, doc/PDF sweeps** → shell out to gpt-5.5 Codex: spawn a Claude wrapper agent (model `sonnet`, effort `low`, label prefixed `gpt5.5:`) that writes a self-contained Codex prompt, runs `codex exec` via Bash, and returns the report (structured via `schema`). Command shapes live in this plugin's `codex-implementation` and `codex-computer-use` skills. Never use Haiku.
+- **Codebase scanning, web searching, doc/PDF sweeps** → shell out to gpt-5.6-sol Codex: spawn a Claude wrapper agent (model `sonnet`, effort `low`, label prefixed `gpt5.6-sol:`) that writes a self-contained Codex prompt, runs `codex exec` via Bash, and returns the report (structured via `schema`). Command shapes live in this plugin's `codex-implementation` and `codex-computer-use` skills. Never use Haiku.
 - **Package capability verification** → `spec-driven-dev:spec-doc-researcher`. Don't build a direction on unverified package capabilities — check inline, and pivot immediately if a package can't do what we need.
 - **Synthesis stays with you.** Codex fetches; you interpret and explain.
 

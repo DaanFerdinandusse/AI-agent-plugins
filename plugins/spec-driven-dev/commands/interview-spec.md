@@ -38,7 +38,7 @@ Assess whether research would be valuable before starting the interview. Not eve
 
 Route research by cost. Broad scanning is cheap-model work — do not spend expensive tokens on it:
 
-- **Codebase scanning, web searching, PDF/doc sweeps** → shell out to gpt-5.5 Codex. Spawn a Claude wrapper agent (model `sonnet`, effort `low`, label prefixed `gpt5.5:` so the user can see Codex is in use) whose job is to write a self-contained Codex prompt, run `codex exec` via Bash, and return the report. Use a `schema` on the wrapper for structured output. Command shapes are in the `codex-implementation` and `codex-computer-use` skills — read the relevant SKILL.md and inline it into the wrapper's prompt. Never use Haiku.
+- **Codebase scanning, web searching, PDF/doc sweeps** → shell out to gpt-5.6-sol Codex. Spawn a Claude wrapper agent (model `sonnet`, effort `low`, label prefixed `gpt5.6-sol:` so the user can see Codex is in use) whose job is to write a self-contained Codex prompt, run `codex exec` via Bash, and return the report. Use a `schema` on the wrapper for structured output. Command shapes are in the `codex-implementation` and `codex-computer-use` skills — read the relevant SKILL.md and inline it into the wrapper's prompt. Never use Haiku.
 - **Package/API capability verification** → `spec-driven-dev:spec-doc-researcher`
 - **Existing code being modified** → `spec-driven-dev:spec-codebase-explorer` or a Codex sweep, whichever fits
 
@@ -124,7 +124,7 @@ Write concrete verification into the spec — the implementation agent executes 
 
 - **APIs first, with curl**: spin up the server and send example payloads with curl; check responses match expectations. Simple, robust, and far easier for a model than browser interaction. A smaller model than Fable (e.g. Sonnet) runs these passes fast and cheap.
 - **AI-agent endpoints**: send example prompts over curl and have the verifying agent act as LLM-as-judge — do the responses match the desired behavior, and is undesired behavior gone? This is the robust way to test non-deterministic APIs. Include the example prompts and judging criteria in the spec.
-- **Browser pass after the slice works end-to-end**: once curl verification passes, a browser-agent pass (shell out to gpt-5.5 Codex, per the `codex-computer-use` skill) exercises the real UI, reports what works, what doesn't, and anything unexpected. Its feedback feeds the next iteration.
+- **Browser pass after the slice works end-to-end**: once curl verification passes, a browser-agent pass (shell out to gpt-5.6-sol Codex, per the `codex-computer-use` skill) exercises the real UI, reports what works, what doesn't, and anything unexpected. Its feedback feeds the next iteration.
 - **Prompt changes**: if the spec involves changing prompts for AI agents, plan the prompt-iteration loop from the implement-spec command: capture the user's desired behavior change, alter → test via curl → judge → repeat, then present a mini HTML of old-vs-new example runs for the user to steer.
 
 ## Writing Guidelines
